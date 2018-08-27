@@ -60,21 +60,9 @@ class BoomCalcFragment : Fragment(), View.OnClickListener {
         return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-//        mView = view
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         mView = null
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        // Refresh the state of the +1 button each time the activity receives focus.
-//        mPlusOneButton!!.initialize(PLUS_ONE_URL, PLUS_ONE_REQUEST_CODE)
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -234,7 +222,8 @@ class BoomCalcFragment : Fragment(), View.OnClickListener {
     }
 
     private fun editUserSettings() {
-        val intent = Intent(activity, UserSetting::class.java)
+//        val intent = Intent(activity, UserSetting::class.java)
+        val intent = Intent(activity, MapsActivity::class.java)
         startActivity(intent)
     }
 

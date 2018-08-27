@@ -70,6 +70,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.nav_presite -> {
                 println("nav_presite")
+                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, PresiteFragment()).commit()
             }
             R.id.nav_customer -> {
                 println("nav_customer")
