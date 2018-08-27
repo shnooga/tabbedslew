@@ -1,14 +1,16 @@
 package com.slewsoft.tabbedslew
 
-import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.preference.PreferenceManager
+import android.support.constraint.Group
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.*
 
-import com.google.android.gms.plus.PlusOneButton
 
 /**
  * A fragment with a Google +1 button.
@@ -18,15 +20,19 @@ import com.google.android.gms.plus.PlusOneButton
  * Use the [BoomCalcFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class BoomCalcFragment : Fragment() {
+class BoomCalcFragment : Fragment(), View.OnClickListener {
+    private val jibCbListener = View.OnClickListener { jibAdjustChecked() }
+    private val insertCbListener = View.OnClickListener { insertAdjustChecked() }
+
     // The URL to +1.  Must be a valid URL.
-    private val PLUS_ONE_URL = "http://developer.android.com"
+//    private val PLUS_ONE_URL = "http://developer.android.com"
     // TODO: Rename and change types of parameters
     private var mParam1: String? = null
     private var mParam2: String? = null
 //    private var mPlusOneButton: PlusOneButton? = null
 
     private var mListener: OnFragmentInteractionListener? = null
+    private var mView: View? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,15 +42,38 @@ class BoomCalcFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_boom_calc, container, false)
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            R.id.btn_calc -> {
+                val msg = getInputVal(R.id.boom_length)
+                toast(msg.toString())
+                calculate()
+            }
+            R.id.userSettingBtn -> editUserSettings()
+            R.id.btn_reset -> reset()
 
-        //Find the +1 button
-//        mPlusOneButton = view.findViewById<View>(R.id.button) as PlusOneButton
+            else -> {
+            }
+        }
+    }
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view: View = inflater!!.inflate(R.layout.fragment_boom_calc, container, false)
+
+        view.findViewById<Button>(R.id.btn_calc).setOnClickListener(this)
+        view.findViewById<Button>(R.id.btn_reset).setOnClickListener(this)
+        view.findViewById<ImageButton>(R.id.userSettingBtn).setOnClickListener(this)
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        mView = view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mView = null
     }
 
     override fun onResume() {
@@ -114,6 +143,111 @@ class BoomCalcFragment : Fragment() {
             fragment.arguments = args
             return fragment
         }
+    }
+
+    private fun toast(msg: String) {
+        Toast.makeText(activity, msg, Toast.LENGTH_LONG).show()
+    }
+
+    private fun jibAdjustChecked() {
+        /* TODO
+            val jibCheckBox = findViewById<CheckBox>(R.id.jib_adj_cb)
+            val jibGroup = findViewById<Group>(R.id.jib_grp)
+
+            if (jibCheckBox.isChecked()) {
+                jibGroup.visibility = View.GONE
+                jibGroup.visibility = View.VISIBLE
+            } else {
+                jibGroup.visibility = View.GONE
+                jibGroup.visibility = View.INVISIBLE
+            }
+        */
+    }
+
+    private fun insertAdjustChecked() {
+/* TODO
+     val jibCheckBox = findViewById<CheckBox>(R.id.insert_adj_cb)
+     val jibGroup = findViewById<Group>(R.id.insert_grp)
+
+     if (jibCheckBox.isChecked()) {
+         jibGroup.visibility = View.GONE
+         jibGroup.visibility = View.VISIBLE
+     } else {
+         jibGroup.visibility = View.GONE
+         jibGroup.visibility = View.INVISIBLE
+     }
+ */
+    }
+
+    private fun getPreferenceInt(id: Int, defaultVal: Int): Int {
+//        val preference = this?.getPreferences(Context.MODE_PRIVATE) ?: return defaultVal
+        val preference = PreferenceManager.getDefaultSharedPreferences(activity)
+        return preference.getInt(getString(id), defaultVal)
+    }
+
+    private fun toDegree(radians: Double): Double {
+        return radians * (180 / Math.PI); }
+
+    private fun toRadian(degree: Double): Double {
+        return degree * (Math.PI / 180); }
+
+    private fun toTwoDecimal(num: Double): Double {
+        return String.format("%.2f", num).toDouble()
+    }
+
+    private fun getInputVal(id: Int): Double {
+        val txt = mView?.findViewById<EditText>(id)?.text ?: "0.0"
+//        val editTxt = getView()?.findViewById<EditText>(id)?.text ?: "0.0"
+        return txt.toString().toDouble()
+    }
+
+    private fun reset() {
+        mView!!.findViewById<EditText>(R.id.boom_length).setText("0")
+        mView!!.findViewById<EditText>(R.id.bldg_heigth).setText("0")
+        mView!!.findViewById<EditText>(R.id.bldg_offset).setText("0")
+
+        mView!!.findViewById<EditText>(R.id.jib_len).setText("0")
+        mView!!.findViewById<EditText>(R.id.jib_offset).setText("0")
+
+        mView!!.findViewById<EditText>(R.id.insert_len).setText("0")
+        mView!!.findViewById<EditText>(R.id.insert_qty).setText("0")
+
+        mView!!.findViewById<EditText>(R.id.boom_angle).setText("0")
+        mView!!.findViewById<EditText>(R.id.object_offset).setText("0")
+        mView!!.findViewById<EditText>(R.id.overall_radius).setText("0")
+        mView!!.findViewById<EditText>(R.id.overall_boom_len).setText("0")
+    }
+
+    private fun calculate() {
+        val vertOffsetVal = getPreferenceInt(R.string.hinge_pin_vert_offset, 0)
+        val horizOffsetVal = getPreferenceInt(R.string.hinge_pin_horiz_offset, 0)
+        val boomLen = getInputVal(R.id.boom_length)
+        val bldHeight = getInputVal(R.id.bldg_heigth)
+        val bldOffset = getInputVal(R.id.bldg_offset) + horizOffsetVal
+        val adjBldHeight = bldHeight - vertOffsetVal
+        val boomAngle = toTwoDecimal(Math.atan(adjBldHeight / bldOffset) * 180 / Math.PI)
+        val hypot = Math.hypot(bldOffset, adjBldHeight)
+        val objectOffSet = toTwoDecimal(bldOffset * (boomLen - hypot) / hypot)
+        val jibOffsetAngle = Math.abs(boomAngle - getInputVal(R.id.jib_offset))
+        val jibOffsetLen = Math.cos(toRadian(jibOffsetAngle)) * getInputVal(R.id.jib_len)
+        val overallRadius = toTwoDecimal(bldOffset + objectOffSet + jibOffsetLen - horizOffsetVal)
+        val overallBoomLen = toTwoDecimal(boomLen + (getInputVal(R.id.insert_qty) * getInputVal(R.id.insert_len)))
+
+        println(jibOffsetLen)
+        mView!!.findViewById<EditText>(R.id.object_offset).setText(objectOffSet.toString())
+        mView!!.findViewById<EditText>(R.id.boom_angle).setText(boomAngle.toString())
+        mView!!.findViewById<EditText>(R.id.overall_radius).setText(overallRadius.toString())
+        mView!!.findViewById<EditText>(R.id.overall_boom_len).setText(overallBoomLen.toString())
+
+        val cbGroup = mView!!.findViewById<Group>(R.id.cb_group)
+
+        cbGroup.visibility = View.GONE
+        cbGroup.visibility = View.VISIBLE
+    }
+
+    private fun editUserSettings() {
+        val intent = Intent(activity, UserSetting::class.java)
+        startActivity(intent)
     }
 
 }// Required empty public constructor

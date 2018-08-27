@@ -7,6 +7,26 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
+    <string name="boom_angle">Boom Angle</string>
+    <string name="object_offset">Object Offset</string>
+    <string name="calc_btn">Calculate</string>
+    <string name="reset_btn">Reset</string>
+    <string name="bld_height">Bldg Height</string>
+    <string name="bld_dist">Bldg Dist to Crane center radius</string>
+    <string name="boom_len">Boom Length</string>
+    <string name="crane_base_height">Hinge pin height</string>
+    <string name="jib_adj">Jib Adjustment</string>
+    <string name="jib_len">Jib Length</string>
+    <string name="jib_offset">Jib Offset (deg)</string>
+    <string name="insert_adj">Insert Adjustment</string>
+    <string name="insert_qty">Insert Qty</string>
+    <string name="insert_len">Insert Length</string>
+    <string name="overall_radius">Overall Radius</string>
+    <string name="overall_boom_len">Overall Boom Length</string>
+    <string name="title_activity_user_setting">UserSettingActivity</string>
+    <string name="hinge_pin_horiz_offset">Hinge Pin Rotary Dist Offset</string>
+    <string name="hinge_pin_vert_offset">Hinge Pin Vertical Dist Offset</string>
+    <string name="update_setting_btn">Update</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
