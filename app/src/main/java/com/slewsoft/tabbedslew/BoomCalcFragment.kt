@@ -21,15 +21,8 @@ import android.widget.*
  * create an instance of this fragment.
  */
 class BoomCalcFragment : Fragment(), View.OnClickListener {
-    private val jibCbListener = View.OnClickListener { jibAdjustChecked() }
-    private val insertCbListener = View.OnClickListener { insertAdjustChecked() }
-
-    // The URL to +1.  Must be a valid URL.
-//    private val PLUS_ONE_URL = "http://developer.android.com"
-    // TODO: Rename and change types of parameters
     private var mParam1: String? = null
     private var mParam2: String? = null
-//    private var mPlusOneButton: PlusOneButton? = null
 
     private var mListener: OnFragmentInteractionListener? = null
     private var mView: View? = null
@@ -44,13 +37,11 @@ class BoomCalcFragment : Fragment(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.btn_calc -> {
-                val msg = getInputVal(R.id.boom_length)
-                toast(msg.toString())
-                calculate()
-            }
+            R.id.btn_calc -> calculate()
             R.id.userSettingBtn -> editUserSettings()
             R.id.btn_reset -> reset()
+            R.id.jib_adj_cb -> jibAdjustChecked()
+            R.id.insert_adj_cb -> insertAdjustChecked()
 
             else -> {
             }
@@ -63,12 +54,15 @@ class BoomCalcFragment : Fragment(), View.OnClickListener {
         view.findViewById<Button>(R.id.btn_calc).setOnClickListener(this)
         view.findViewById<Button>(R.id.btn_reset).setOnClickListener(this)
         view.findViewById<ImageButton>(R.id.userSettingBtn).setOnClickListener(this)
+        view.findViewById<CheckBox>(R.id.jib_adj_cb).setOnClickListener(this)
+        view.findViewById<CheckBox>(R.id.insert_adj_cb).setOnClickListener(this)
+        mView = view
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mView = view
+//        mView = view
     }
 
     override fun onDestroyView() {
@@ -123,8 +117,6 @@ class BoomCalcFragment : Fragment(), View.OnClickListener {
         // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
         private val ARG_PARAM1 = "param1"
         private val ARG_PARAM2 = "param2"
-        // The request code must be 0 or greater.
-        private val PLUS_ONE_REQUEST_CODE = 0
 
         /**
          * Use this factory method to create a new instance of
@@ -150,33 +142,29 @@ class BoomCalcFragment : Fragment(), View.OnClickListener {
     }
 
     private fun jibAdjustChecked() {
-        /* TODO
-            val jibCheckBox = findViewById<CheckBox>(R.id.jib_adj_cb)
-            val jibGroup = findViewById<Group>(R.id.jib_grp)
+        val checkBox = mView!!.findViewById<CheckBox>(R.id.jib_adj_cb)
+        val group = mView!!.findViewById<Group>(R.id.jib_grp)
 
-            if (jibCheckBox.isChecked()) {
-                jibGroup.visibility = View.GONE
-                jibGroup.visibility = View.VISIBLE
-            } else {
-                jibGroup.visibility = View.GONE
-                jibGroup.visibility = View.INVISIBLE
-            }
-        */
+        if (checkBox.isChecked()) {
+            group.visibility = View.GONE
+            group.visibility = View.VISIBLE
+        } else {
+            group.visibility = View.GONE
+            group.visibility = View.INVISIBLE
+        }
     }
 
     private fun insertAdjustChecked() {
-/* TODO
-     val jibCheckBox = findViewById<CheckBox>(R.id.insert_adj_cb)
-     val jibGroup = findViewById<Group>(R.id.insert_grp)
+        val checkBox = mView!!.findViewById<CheckBox>(R.id.insert_adj_cb)
+        val group = mView!!.findViewById<Group>(R.id.insert_grp)
 
-     if (jibCheckBox.isChecked()) {
-         jibGroup.visibility = View.GONE
-         jibGroup.visibility = View.VISIBLE
-     } else {
-         jibGroup.visibility = View.GONE
-         jibGroup.visibility = View.INVISIBLE
-     }
- */
+        if (checkBox.isChecked()) {
+            group.visibility = View.GONE
+            group.visibility = View.VISIBLE
+        } else {
+            group.visibility = View.GONE
+            group.visibility = View.INVISIBLE
+        }
     }
 
     private fun getPreferenceInt(id: Int, defaultVal: Int): Int {
@@ -196,7 +184,7 @@ class BoomCalcFragment : Fragment(), View.OnClickListener {
     }
 
     private fun getInputVal(id: Int): Double {
-        val txt = mView?.findViewById<EditText>(id)?.text ?: "0.0"
+        val txt = mView!!.findViewById<EditText>(id)?.text ?: "0.0"
 //        val editTxt = getView()?.findViewById<EditText>(id)?.text ?: "0.0"
         return txt.toString().toDouble()
     }
@@ -250,4 +238,4 @@ class BoomCalcFragment : Fragment(), View.OnClickListener {
         startActivity(intent)
     }
 
-}// Required empty public constructor
+}
