@@ -21,19 +21,8 @@ import android.widget.*
  * create an instance of this fragment.
  */
 class BoomCalcFragment : Fragment(), View.OnClickListener {
-    private var mParam1: String? = null
-    private var mParam2: String? = null
-
     private var mListener: OnFragmentInteractionListener? = null
     private var mView: View? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (arguments != null) {
-            mParam1 = arguments!!.getString(ARG_PARAM1)
-            mParam2 = arguments!!.getString(ARG_PARAM2)
-        }
-    }
 
     override fun onClick(v: View?) {
         when (v?.id) {
@@ -63,27 +52,6 @@ class BoomCalcFragment : Fragment(), View.OnClickListener {
     override fun onDestroyView() {
         super.onDestroyView()
         mView = null
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    fun onButtonPressed(uri: Uri) {
-        if (mListener != null) {
-            mListener!!.onFragmentInteraction(uri)
-        }
-    }
-
-//    override fun onAttach(context: Context?) {
-//        super.onAttach(context)
-//        if (context is OnFragmentInteractionListener) {
-//            mListener = context
-//        } else {
-//            throw RuntimeException(context!!.toString() + " must implement OnFragmentInteractionListener")
-//        }
-//    }
-
-    override fun onDetach() {
-        super.onDetach()
-        mListener = null
     }
 
     /**
@@ -222,9 +190,7 @@ class BoomCalcFragment : Fragment(), View.OnClickListener {
     }
 
     private fun editUserSettings() {
-//        val intent = Intent(activity, UserSetting::class.java)
-        val intent = Intent(activity, MapsActivity::class.java)
+        val intent = Intent(activity, UserSetting::class.java)
         startActivity(intent)
     }
-
 }

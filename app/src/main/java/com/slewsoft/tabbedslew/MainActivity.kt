@@ -30,12 +30,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener(this)
-
-
-//        if(savedInstanceState == null) {
-//            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, BoomCalcFragment()).commit()
-//            nav_view.setCheckedItem(R.id.nav_boom_calc)
-//        }
     }
 
     override fun onBackPressed() {
